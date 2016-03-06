@@ -160,7 +160,14 @@ function ngOutletDirective($animate, $q, $rootRouter) {
         })();
         var parentCtrl = ctrls[0], myCtrl = ctrls[1], router = (parentCtrl && parentCtrl.$$router) || rootRouter;
         myCtrl.$$currentComponent = null;
-        router.registerPrimaryOutlet(new Outlet(myCtrl, router));
+        // auxOutlet 実装されていないか試したけど、これだけじゃ足りない
+        if (attrs.name) {
+          var outlet = new Outlet(myCtrl, router);
+          outlet.name = attrs.name;
+          router.registerAuxOutlet(outlet);
+        } else {
+          router.registerPrimaryOutlet(new Outlet(myCtrl, router));
+        }
     }
 }
 /**
