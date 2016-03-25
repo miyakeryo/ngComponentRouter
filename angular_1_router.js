@@ -2595,6 +2595,8 @@ var Router = (function () {
                         _this._emitNavigationFinish(instruction.toRootUrl());
                         return true;
                     });
+                }else{
+                  return _resolveToFalse;
                 }
             });
         });
@@ -2619,7 +2621,7 @@ var Router = (function () {
     Router.prototype._emitNavigationFinish = function (url) { ObservableWrapper.callEmit(this._subject, url); };
     Router.prototype._afterPromiseFinishNavigating = function (promise) {
         var _this = this;
-        return PromiseWrapper.catchError(promise.then(function (_) { return _this._finishNavigating(); }), function (err) {
+        return PromiseWrapper.catchError(promise.then(function (result) { _this._finishNavigating(); return result; }), function (err) {
             _this._finishNavigating();
             throw err;
         });
